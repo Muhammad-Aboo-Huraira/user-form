@@ -412,8 +412,8 @@ const UserForm = () => {
                   ) : null,
                 }}
                 inputProps={{
-                  min: 10000000000,
-                  max: 99999999999,
+                  min: 1000000000,
+                  max: 9999999999,
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
