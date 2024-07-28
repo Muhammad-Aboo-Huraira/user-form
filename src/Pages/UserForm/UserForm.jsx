@@ -27,8 +27,10 @@ import {
 import InputAdornment from '@mui/material/InputAdornment';
 import ErrorIcon from '@mui/icons-material/Error';
 import { getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const UserForm = () => {
+  const navigate = useNavigate();
   const [roleEnabled, setRoleEnabled] = useState(false);
   const [image, setImage] = useState(null);
   const [username, setUsername] = useState("");
@@ -101,11 +103,7 @@ const UserForm = () => {
           role: roleEnabled ? role : null,
           imageUrl,
         });
-        console.log(data);
-  
-        console.log("Form data submitted successfully!");
-  
-        // Clear the form
+
         setUsername("");
         setEmail("");
         setPhoneNumber("");
@@ -116,6 +114,7 @@ const UserForm = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
+        navigate("/usertable");
       } catch (error) {
         console.error("Error submitting form data: ", error);
         setUsername("");

@@ -15,6 +15,7 @@ import {
   Avatar,
   Box,
   Button,
+  TextField,
 } from "@mui/material";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
@@ -24,6 +25,7 @@ const UserTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [entriesPerPage, setEntriesPerPage] = useState(5);
+  const [filter, setFilter] = useState("");
   const headers = [
     { id: "index", label: "#" },
     { id: "email", label: "EMAIL" },
@@ -100,6 +102,13 @@ const UserTable = () => {
           entries
         </Typography>
       </Box>
+      <TextField
+        label="Filter by Username"
+        variant="outlined"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        sx={{ marginBottom: 2, fontFamily: "Noto Sans, sans-serif", width: '100%' }}
+      />
       <TableContainer
         component={Paper}
         sx={{ fontFamily: "Noto Sans, sans-serif" }}
@@ -119,6 +128,9 @@ const UserTable = () => {
           </TableHead>
           <TableBody>
             {users
+              .filter((user) => 
+                user.username.toLowerCase().includes(filter.toLowerCase())
+              )
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user, index) => (
                 <TableRow
