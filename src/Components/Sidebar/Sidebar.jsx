@@ -15,13 +15,14 @@ import SelectedUserTable from "../../assets/SelectedUserTable.png";
 import UnSelectedUserTable from "../../assets/UnSelectedUserTable.png";
 import Toolbar from "@mui/material/Toolbar";
 import { Avatar } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function Sidebar(props) {
   const { window, data } = props;
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
@@ -84,7 +85,12 @@ export default function Sidebar(props) {
       <Toolbar>
         <Avatar
           src={Group1}
-          sx={{ borderRadius: 0, height: 15.5, width: 15.5 }}
+          sx={{
+            borderRadius: 0,
+            height: 15.5,
+            width: 15.5,
+            display: { xs: "none", sm: "block" }, // Hide on mobile screens
+          }}
         />
       </Toolbar>
       <List>
@@ -132,7 +138,30 @@ export default function Sidebar(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex", padding: "20px" }}>
+    <Box sx={{ display: "flex", marginTop: "2rem" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "1rem",
+          left: "1rem",
+          zIndex: 1300, // Ensure it is above other components
+        }}
+      >
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{
+            display: { xs: "block", sm: "none" }, // Show on mobile only
+          }}
+        >
+          <Avatar
+            src={Group1}
+            sx={{ borderRadius: 0, height: 30, width: 30 }}
+          />
+        </IconButton>
+      </Box>
       <AppBar
         position="fixed"
         sx={{
@@ -140,21 +169,9 @@ export default function Sidebar(props) {
           ml: { sm: `${drawerWidth}px` },
           backgroundColor: "#ffffff",
           boxShadow: "none",
+          display: { xs: "none", sm: "block" }, // Hide AppBar on mobile screens
         }}
-      >
-        <IconButton
-          color="#B5B5B5"
-          aria-label="open drawer"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }}
-        >
-          <Avatar
-            src={Group1}
-            sx={{ borderRadius: 0, height: 15.5, width: 15.5 }}
-          />
-        </IconButton>
-      </AppBar>
+      />
       <Box
         component="nav"
         sx={{
@@ -162,7 +179,6 @@ export default function Sidebar(props) {
         }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
@@ -189,7 +205,8 @@ export default function Sidebar(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              height: "90%",
+              height: "100%",
+              maxHeight: "95vh",
               mt: "2rem",
               borderRadius: "3px",
             },
@@ -203,15 +220,27 @@ export default function Sidebar(props) {
         component="main"
         sx={{
           flexGrow: 1,
-          mt: 1,
+          mt: { xs: "3rem", sm: 1 }, // Adjust top margin for mobile
           p: 2,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           backgroundColor: "white",
           borderRadius: "3px",
           height: "100%",
+          minHeight: "85vh",
+          display: "flex", // Use flexbox
+          justifyContent: "center", // Center horizontally
+          alignItems: "center", // Center vertically
         }}
       >
-        {data}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "100%", sm: "80%" }, // Adjust width based on screen size
+            mx: "auto",
+          }}
+        >
+          {data}
+        </Box>
       </Box>
     </Box>
   );
